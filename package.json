@@ -5,8 +5,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "LocalStorage",
+    "Offline",
+    "Storage",
+    "Browser",
+    "JavaScript",
+    "Json",
+    "Database",
+    "Frontend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baxriddin-dev/smart-storage.git"
+  },
   "author": "Baxriddin Chorshanbiyev",
   "license": "MIT",
-  "description": "A simple library for working with LocalStorage."
+  "description": "An intuitive library enabling frontend developers to test their applications using a local database."
 }
