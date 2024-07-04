@@ -7,13 +7,8 @@
   </head>
   <body>
     <script type="module">
-      import { Database } from "./src/index.js";
-
+      import { Database } from "../src/index.js";
       const db = new Database("MyApp");
-      db.createCollection('testuchun');
-
-      db.dropCollection()
-
       console.log(db)
     </script>
   </body>
