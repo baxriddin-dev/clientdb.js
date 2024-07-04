@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      import { Database } from "./src/index.js";
+
+      const db = new Database("MyApp");
+      db.createCollection('testuchun');
+
+      db.dropCollection()
+
+      console.log(db)
+    </script>
+  </body>
+</html>
