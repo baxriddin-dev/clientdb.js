@@ -18,18 +18,16 @@
     <ul class="todos"></ul>
 
     <script type="module">
-      import { Database, ID } from "../src/index.js";
+      import { Database } from "../src/index.js";
 
       const db = new Database("Todo");
       const todos = db.createCollection("todos");
-
-      console.log(db);
+      const users = db.createCollection('users');
 
       function addTodo() {
         const input = document.querySelector('input');
 
         db.todos.add({
-          id: ID.unique(),
           title: input.value,
           completed: false,
         });
@@ -45,8 +43,7 @@
       }
 
       function updateTodo(todo) {
-        db.todos.update(todo.id, {
-          id: todo.id,
+        db.todos.update(todo.$id, {
           title: todo.title,
           completed: !todo.completed
         })
@@ -61,11 +58,11 @@
           const li = document.createElement("li");
 
           li.textContent = todo.title;
-          li.setAttribute('data-id', todo.id)
+          li.setAttribute('data-id', todo.$id)
           li.setAttribute('data-completed', todo.completed)
 
           li.addEventListener('dblclick', () => {
-            removeTodo(todo.id);
+            removeTodo(todo.$id);
           })
 
           li.addEventListener('click', () => {

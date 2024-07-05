@@ -1,4 +1,6 @@
+import { ID } from "../utils/id.js";
 import { Storage } from "../utils/storage.js";
+import { isObject, isEmptyObject } from "../utils/utils.js";
 
 export class Database {
   constructor(databaseName) {
@@ -32,9 +34,24 @@ export class Database {
     Object.keys(this.collections).forEach((key) => {
       const currentCollection = this.collections[key];
 
-      this[key] = {
+      const collectionMethods = {
         add: (data) => {
-          currentCollection.push(data);
+          if (data === undefined) return;
+
+          if (!isObject(data)) {
+            throw new Error("The data must be of type object");
+          }
+
+          if (isEmptyObject(data)) {
+            throw new Error("Data must not be empty");
+          }
+
+          currentCollection.push({
+            $id: ID.unique(),
+            $createdAt: Date.now(),
+            $updatedAt: Date.now(),
+            ...data,
+          });
           this._save();
         },
         update: (id, data) => {
@@ -57,6 +74,11 @@ export class Database {
           return currentCollection;
         },
       };
+
+      Object.defineProperty(this, key, {
+        get: () => collectionMethods,
+        enumerable: false,
+      });
     });
   }
 
