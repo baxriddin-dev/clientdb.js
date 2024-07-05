@@ -3,8 +3,16 @@ import { Storage } from "../utils/storage.js";
 import { isObject, isEmptyObject } from "../utils/utils.js";
 
 export class Database {
+  static createdDatabases = {};
+
   constructor(databaseName) {
     const trimmedName = this._validateName(databaseName, "database");
+
+    if (Database.createdDatabases[trimmedName]) {
+      throw new Error(`Database '${trimmedName}' already exists.`);
+    }
+
+    Database.createdDatabases[trimmedName] = true;
 
     this.database = trimmedName;
     this.collections = Storage.get(this.database) || {};
@@ -55,6 +63,8 @@ export class Database {
           this._save();
         },
         update: (id, data) => {
+          if (data === undefined) return;
+
           if (!isObject(data)) {
             throw new Error("The data must be of type object");
           }
