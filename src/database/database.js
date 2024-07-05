@@ -81,15 +81,17 @@ export class Database {
             this._save();
           }
         },
-        list: () => {
+        list: (id) => {
           return currentCollection;
         },
       };
 
-      Object.defineProperty(this, key, {
-        get: () => collectionMethods,
-        enumerable: false,
-      });
+      if (!Object.prototype.hasOwnProperty.call(this, key)) {
+        Object.defineProperty(this, key, {
+          get: () => collectionMethods,
+          enumerable: false,
+        });
+      }
     });
   }
 
