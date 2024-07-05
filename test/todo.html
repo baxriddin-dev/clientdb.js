@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo</title>
+    <style>
+      li[data-completed="true"] {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="todos-wrap">
+      <input type="text" placeholder="Write something..." />
+      <button>Add Task</button>
+    </div>
+    <ul class="todos"></ul>
+
+    <script type="module">
+      import { Database, ID } from "../src/index.js";
+
+      const db = new Database("Todo");
+      const todos = db.createCollection("todos");
+
+      console.log(db);
+
+      function addTodo() {
+        const input = document.querySelector('input');
+
+        db.todos.add({
+          id: ID.unique(),
+          title: input.value,
+          completed: false,
+        });
+
+        input.value = '';
+
+        renderTodos();
+      }
+
+      function removeTodo(id) {
+        db.todos.remove(id)
+        renderTodos()
+      }
+
+      function updateTodo(todo) {
+        db.todos.update(todo.id, {
+          id: todo.id,
+          title: todo.title,
+          completed: !todo.completed
+        })
+        renderTodos();
+      }
+
+      function renderTodos() {
+        const todosEl = document.querySelector(".todos");
+        todosEl.innerHTML = "";
+
+        db.todos.list().forEach((todo) => {
+          const li = document.createElement("li");
+
+          li.textContent = todo.title;
+          li.setAttribute('data-id', todo.id)
+          li.setAttribute('data-completed', todo.completed)
+
+          li.addEventListener('dblclick', () => {
+            removeTodo(todo.id);
+          })
+
+          li.addEventListener('click', () => {
+            updateTodo(todo);
+          })
+
+          todosEl.appendChild(li);
+        });
+      }
+
+      renderTodos();
+      document.querySelector("button").addEventListener("click", addTodo);
+    </script>
+  </body>
+</html>

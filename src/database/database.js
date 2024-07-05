@@ -6,6 +6,8 @@ export class Database {
 
     this.database = trimmedName;
     this.collections = Storage.get(this.database) || {};
+
+    this._listCollectionMethods();
   }
 
   _save() {
@@ -26,6 +28,38 @@ export class Database {
     return trimmedName;
   }
 
+  _listCollectionMethods() {
+    Object.keys(this.collections).forEach((key) => {
+      const currentCollection = this.collections[key];
+
+      this[key] = {
+        add: (data) => {
+          currentCollection.push(data);
+          this._save();
+        },
+        update: (id, data) => {
+          const idx = currentCollection.findIndex((item) => item.id === id);
+
+          if (idx !== -1) {
+            currentCollection[idx] = data;
+            this._save();
+          }
+        },
+        remove: (id) => {
+          const idx = currentCollection.findIndex((item) => item.id === id);
+
+          if (idx !== -1) {
+            currentCollection.splice(idx, 1);
+            this._save();
+          }
+        },
+        list: () => {
+          return currentCollection;
+        },
+      };
+    });
+  }
+
   createCollection(collectionName) {
     const trimmedName = this._validateName(collectionName, "collection");
 
@@ -33,6 +67,7 @@ export class Database {
       this.collections[trimmedName] = [];
       this._save();
 
+      this._listCollectionMethods();
       return [];
     } else {
       return this.collections[trimmedName];
