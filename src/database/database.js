@@ -55,10 +55,21 @@ export class Database {
           this._save();
         },
         update: (id, data) => {
+          if (!isObject(data)) {
+            throw new Error("The data must be of type object");
+          }
+
           const idx = currentCollection.findIndex((item) => item.id === id);
 
           if (idx !== -1) {
-            currentCollection[idx] = data;
+            const originalData = currentCollection[idx];
+            currentCollection[idx] = {
+              ...originalData,
+              ...data,
+              $id: originalData.$id,
+              $createdAt: originalData.$createdAt,
+              $updatedAt: Date.now(),
+            };
             this._save();
           }
         },
