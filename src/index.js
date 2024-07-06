@@ -1,5 +1,1 @@
-import { Database } from "./database/database.js";
-
-export {
-  Database,
-};
+export { ClientDB } from "./database/database.js";

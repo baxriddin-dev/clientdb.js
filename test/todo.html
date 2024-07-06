@@ -18,37 +18,37 @@
     <ul class="todos"></ul>
 
     <script type="module">
-      import { Database } from "../src/index.js";
+      import { ClientDB } from "../src/index.js";
 
-      const db = new Database("Todo");
+      const db = new ClientDB("Todo");
       const todos = db.createCollection("todos");
-      const users = db.createCollection('users');
+      const users = db.createCollection("users");
 
-      console.log(db)
+      console.log(db);
 
       function addTodo() {
-        const input = document.querySelector('input');
+        const input = document.querySelector("input");
 
         db.todos.add({
           title: input.value,
           completed: false,
         });
 
-        input.value = '';
+        input.value = "";
 
         renderTodos();
       }
 
       function removeTodo(id) {
-        db.todos.remove(id)
-        renderTodos()
+        db.todos.delete(id);
+        renderTodos();
       }
 
       function updateTodo(todo) {
         db.todos.update(todo.$id, {
           title: todo.title,
-          completed: !todo.completed
-        })
+          completed: !todo.completed,
+        });
         renderTodos();
       }
 
@@ -60,16 +60,16 @@
           const li = document.createElement("li");
 
           li.textContent = todo.title;
-          li.setAttribute('data-id', todo.$id)
-          li.setAttribute('data-completed', todo.completed)
+          li.setAttribute("data-id", todo.$id);
+          li.setAttribute("data-completed", todo.completed);
 
-          li.addEventListener('dblclick', () => {
+          li.addEventListener("dblclick", () => {
             removeTodo(todo.$id);
-          })
+          });
 
-          li.addEventListener('click', () => {
+          li.addEventListener("click", () => {
             updateTodo(todo);
-          })
+          });
 
           todosEl.appendChild(li);
         });
@@ -78,6 +78,7 @@
       renderTodos();
       document.querySelector("button").addEventListener("click", addTodo);
 
+      console.log(db.todos.list({ filter: { completed: true } }));
     </script>
   </body>
 </html>
