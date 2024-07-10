@@ -117,57 +117,54 @@ export class ClientDB {
           }
         },
         list: (options = {}) => {
-          const { id, filter, sort, search, limit, page, fields } = options;
-        
+          const { id, filter, sort, search, limit, page } = options;
+
           let result = currentCollection;
-        
+
           if (id) {
             const idx = result.findIndex((item) => item.$id === id);
             return result[idx];
           }
-        
+
           if (filter) {
-            result = result.filter(item => {
-              return Object.keys(filter).every(key => item[key] === filter[key]);
-            });
-          }
-        
-          if (search) {
-            result = result.filter(item => {
-              return Object.keys(search).some(key => {
-                return String(item[key]).toLowerCase().includes(String(search[key]).toLowerCase());
+            result = items.filter((item) => {
+              return Object.keys(filter).every((key) => {
+                if (typeof filter[key] === "function") {
+                  return filter[key](item[key]);
+                } else {
+                  return item[key] == filter[key];
+                }
               });
             });
           }
-        
+
+          if (search) {
+            result = result.filter((item) => {
+              return Object.keys(search).some((key) => {
+                let itemValue = item[key] !== null && item[key] !== undefined ? String(item[key]).toLowerCase() : "";
+                let searchValue =
+                  search[key] !== null && search[key] !== undefined ? String(search[key]).toLowerCase() : "";
+                return itemValue.includes(searchValue);
+              });
+            });
+          }
+
           if (sort) {
             result = result.sort((a, b) => {
               for (let key in sort) {
-                if (a[key] > b[key]) return sort[key] === 'asc' ? 1 : -1;
-                if (a[key] < b[key]) return sort[key] === 'asc' ? -1 : 1;
+                if (a[key] > b[key]) return sort[key] === "asc" ? 1 : -1;
+                if (a[key] < b[key]) return sort[key] === "asc" ? -1 : 1;
               }
               return 0;
             });
           }
-        
+
           if (limit !== undefined && page !== undefined) {
             const start = (page - 1) * limit;
             const end = page * limit;
             result = result.slice(start, end);
           }
-        
-          if (fields) {
-            result = result.map(item => {
-              const selectedFields = {};
-              fields.forEach(field => {
-                if (item[field] !== undefined) {
-                  selectedFields[field] = item[field];
-                }
-              });
-              return selectedFields;
-            });
-          }
-        
+
           return result;
         },
       };
