@@ -1,4 +1,4 @@
-import { isObject, isEmptyObject, ID, Storage } from "./utils.js";
+import { isObject, isEmptyObject, ID, Storage, ClientDBError } from "./utils.js";
 
 export class ClientDB {
   static createdDatabases = {};
@@ -7,7 +7,7 @@ export class ClientDB {
     const trimmedName = this._validateName(databaseName, "database");
 
     if (ClientDB.createdDatabases[trimmedName]) {
-      throw new Error(`Database '${trimmedName}' already exists.`);
+      throw new ClientDBError(`Database '${trimmedName}' already exists.`);
     }
 
     ClientDB.createdDatabases[trimmedName] = true;
@@ -26,11 +26,11 @@ export class ClientDB {
     const trimmedName = name?.toString().trim();
 
     if (!trimmedName && status === "drop") {
-      throw new Error(`You did not specify the name of the ${type} to delete.`);
+      throw new ClientDBError(`You did not specify the name of the ${type} to delete.`);
     }
 
     if (!trimmedName) {
-      throw new Error(`You did not name the ${type}!`);
+      throw new ClientDBError(`You did not name the ${type}!`);
     }
 
     return trimmedName;
@@ -45,11 +45,11 @@ export class ClientDB {
           if (data === undefined) return;
 
           if (!isObject(data)) {
-            throw new Error("The data must be of type object");
+            throw new ClientDBError("The data must be of type object");
           }
 
           if (isEmptyObject(data)) {
-            throw new Error("Data must not be empty");
+            throw new ClientDBError("Data must not be empty");
           }
 
           const newData = {
@@ -72,7 +72,7 @@ export class ClientDB {
           if (data === undefined) return;
 
           if (!isObject(data)) {
-            throw new Error("The data must be of type object");
+            throw new ClientDBError("The data must be of type object");
           }
 
           const idx = currentCollection.findIndex((item) => item.$id === id);
@@ -182,11 +182,7 @@ export class ClientDB {
     if (!(trimmedName in this.collections)) {
       this.collections[trimmedName] = [];
       this._save();
-
       this._listCollectionMethods();
-      return [];
-    } else {
-      return this.collections[trimmedName];
     }
   }
 
@@ -196,21 +192,28 @@ export class ClientDB {
     if (trimmedName) {
       delete this.collections[trimmedName];
       this._save();
-
-      return true;
-    } else {
-      console.error(`Collection ${trimmedName} does not exist`);
-      return false;
+      this._listCollectionMethods();
     }
   }
 
   dropDatabase() {
     Storage.remove(this.database);
+  }
 
-    if (!Storage.get(this.database)) {
-      return true;
+  static databaseExists(databaseName) {
+    const trimmedName = databaseName?.toString().trim();
+    return !!ClientDB.createdDatabases[trimmedName];
+  }
+
+  static collectionExists(databaseName, collectionName) {
+    const trimmedDatabaseName = databaseName?.toString().trim();
+    const trimmedCollectionName = collectionName?.toString().trim();
+    
+    if (!ClientDB.createdDatabases[trimmedDatabaseName]) {
+      return false;
     }
-
-    return false;
+    
+    const collections = Storage.get(trimmedDatabaseName) || {};
+    return trimmedCollectionName in collections;
   }
 }

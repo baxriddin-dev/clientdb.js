@@ -22,6 +22,13 @@ class ID {
   }
 }
 
+class ClientDBError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ClientDB Error";
+  }
+}
+
 function isObject(value) {
   return value !== null && typeof value === "object" && value.constructor === Object;
 }
@@ -30,4 +37,4 @@ function isEmptyObject(obj) {
   return Object.keys(obj).length === 0;
 }
 
-export { Storage, ID, isObject, isEmptyObject };
+export { Storage, ID, ClientDBError, isObject, isEmptyObject };
