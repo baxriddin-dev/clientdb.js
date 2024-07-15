@@ -1,7 +1,7 @@
 {
   "name": "@baxriddin-dev/clientdb",
-  "version": "1.0.0",
-  "main": "./src/index.js",
+  "version": "1.0.4",
+  "main": "src/index.js",
   "type": "module",
   "keywords": [
     "LocalStorage",
@@ -18,5 +18,8 @@
   },
   "author": "Baxriddin Chorshanbiyev",
   "license": "MIT",
-  "description": "An intuitive library enabling frontend developers to test their applications using a local database."
+  "description": "An intuitive library enabling frontend developers to test their applications using a local database.",
+  "files": [
+    "src"
+  ]
 }
