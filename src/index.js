@@ -98,7 +98,7 @@ export class ClientDB {
           return {
             success: true,
             message: "Item updated successfully",
-            data: updatedData,
+            data: {...updatedData},
           };
         },
         delete: (id) => {
