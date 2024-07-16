@@ -3,17 +3,10 @@ import { isObject, isEmptyObject, ID, Storage, ClientDBError } from "./utils.js"
 export class ClientDB {
   static createdDatabases = {};
 
-  /**
-   * Creates a new instance of ClientDB.
-   * @param {string} databaseName - The name of the database.
-   * @throws {ClientDBError} If a database with the same name already exists.
-   */
   constructor(databaseName) {
     const trimmedName = this._validateName(databaseName, "database");
 
-    if (ClientDB.createdDatabases[trimmedName]) {
-      throw new ClientDBError(`Database '${trimmedName}' already exists.`);
-    }
+    if (ClientDB.createdDatabases[trimmedName]) return;
 
     ClientDB.createdDatabases[trimmedName] = true;
 
@@ -23,23 +16,10 @@ export class ClientDB {
     this._listCollectionMethods();
   }
 
-  /**
-   * Saves the current state of collections to the storage.
-   * @private
-   */
   _save() {
     Storage.set(this.database, this.collections);
   }
 
-  /**
-   * Validates and trims the name.
-   * @param {string} name - The name to validate.
-   * @param {string} type - The type of the name (e.g., 'database', 'collection').
-   * @param {string} [status=null] - The status of the action (e.g., 'drop').
-   * @returns {string} The trimmed name.
-   * @throws {ClientDBError} If the name is invalid.
-   * @private
-   */
   _validateName(name, type, status = null) {
     const trimmedName = name?.toString().trim();
 
@@ -54,21 +34,11 @@ export class ClientDB {
     return trimmedName;
   }
 
-  /**
-   * Lists methods for each collection in the database.
-   * @private
-   */
   _listCollectionMethods() {
     Object.keys(this.collections).forEach((key) => {
       const currentCollection = this.collections[key];
 
       const collectionMethods = {
-        /**
-         * Adds a new item to the collection.
-         * @param {Object} data - The data to add.
-         * @returns {Object} The result of the add operation.
-         * @throws {ClientDBError} If the data is invalid.
-         */
         add: (data) => {
           if (data === undefined) return;
 
@@ -96,13 +66,6 @@ export class ClientDB {
             data: newData,
           };
         },
-        /**
-         * Updates an existing item in the collection.
-         * @param {string} id - The ID of the item to update.
-         * @param {Object} data - The new data for the item.
-         * @returns {Object} The result of the update operation.
-         * @throws {ClientDBError} If the data is invalid.
-         */
         update: (id, data) => {
           if (data === undefined) return;
 
@@ -138,11 +101,6 @@ export class ClientDB {
             data: updatedData,
           };
         },
-        /**
-         * Deletes an item from the collection.
-         * @param {string} id - The ID of the item to delete.
-         * @returns {Object} The result of the delete operation.
-         */
         delete: (id) => {
           const idx = currentCollection.findIndex((item) => item.$id === id);
 
@@ -154,17 +112,6 @@ export class ClientDB {
             return { success: false, message: "No information available for this id." };
           }
         },
-        /**
-         * Lists items in the collection with optional filters, sorting, and pagination.
-         * @param {Object} [options={}] - The options for listing items.
-         * @param {string} [options.id] - The ID of a specific item to retrieve.
-         * @param {Object} [options.filter] - The filter criteria.
-         * @param {Object} [options.sort] - The sort criteria.
-         * @param {Object} [options.search] - The search criteria.
-         * @param {number} [options.limit] - The number of items per page.
-         * @param {number} [options.page] - The page number to retrieve.
-         * @returns {Array|Object} The list of items or a specific item if ID is provided.
-         */
         list: (options = {}) => {
           const { id, filter, sort, search, limit, page } = options;
 
@@ -227,10 +174,6 @@ export class ClientDB {
     });
   }
 
-  /**
-   * Creates a new collection in the database.
-   * @param {string} collectionName - The name of the collection to create.
-   */
   createCollection(collectionName) {
     const trimmedName = this._validateName(collectionName, "collection");
 
@@ -241,11 +184,6 @@ export class ClientDB {
     }
   }
 
-  /**
-   * Drops a collection from the database.
-   * @param {string} collectionName - The name of the collection to drop.
-   * @throws {ClientDBError} If the collection name is invalid.
-   */
   dropCollection(collectionName) {
     const trimmedName = this._validateName(collectionName, "collection", "drop");
 
@@ -256,30 +194,16 @@ export class ClientDB {
     }
   }
 
-  /**
-   * Drops the entire database.
-   */
   dropDatabase() {
     delete ClientDB.createdDatabases[this.database];
     Storage.remove(this.database);
   }
 
-  /**
-   * Checks if a database exists.
-   * @param {string} databaseName - The name of the database to check.
-   * @returns {boolean} True if the database exists, false otherwise.
-   */
   static databaseExists(databaseName) {
     const trimmedName = databaseName?.toString().trim();
     return !!ClientDB.createdDatabases[trimmedName];
   }
 
-  /**
-   * Checks if a collection exists in a specified database.
-   * @param {string} databaseName - The name of the database.
-   * @param {string} collectionName - The name of the collection.
-   * @returns {boolean} True if the collection exists, false otherwise.
-   */
   static collectionExists(databaseName, collectionName) {
     const trimmedDatabaseName = databaseName?.toString().trim();
     const trimmedCollectionName = collectionName?.toString().trim();
