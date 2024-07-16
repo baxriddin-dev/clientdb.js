@@ -161,7 +161,7 @@ export class ClientDB {
             result = result.slice(start, end);
           }
 
-          return result;
+          return [...result];
         },
       };
 
@@ -175,6 +175,10 @@ export class ClientDB {
   }
 
   createCollection(collectionName) {
+    if (!this.collections) {
+      this.collections = {};
+    }
+
     const trimmedName = this._validateName(collectionName, "collection");
 
     if (!(trimmedName in this.collections)) {
