@@ -1,6 +1,6 @@
 {
   "name": "@baxriddin-dev/clientdb",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "type": "module",

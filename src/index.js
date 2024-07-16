@@ -2,13 +2,17 @@ import { isObject, isEmptyObject, ID, Storage, ClientDBError } from "./utils.js"
 
 export class ClientDB {
   static createdDatabases = {};
+  static instances = {};
 
   constructor(databaseName) {
     const trimmedName = this._validateName(databaseName, "database");
 
-    if (ClientDB.createdDatabases[trimmedName]) return;
+    if (ClientDB.instances[trimmedName]) {
+      return ClientDB.instances[trimmedName];
+    }
 
     ClientDB.createdDatabases[trimmedName] = true;
+    ClientDB.instances[trimmedName] = this;
 
     this.database = trimmedName;
     this.collections = Storage.get(this.database) || {};
@@ -98,7 +102,7 @@ export class ClientDB {
           return {
             success: true,
             message: "Item updated successfully",
-            data: {...updatedData},
+            data: { ...updatedData },
           };
         },
         delete: (id) => {
