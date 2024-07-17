@@ -10,10 +10,6 @@ class Storage {
   static remove(key) {
     window.localStorage.removeItem(key);
   }
-
-  static removeAll() {
-    window.localStorage.clear();
-  }
 }
 
 class ID {
