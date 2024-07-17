@@ -127,7 +127,7 @@ export class ClientDB {
           }
 
           if (filter) {
-            result = items.filter((item) => {
+            result = result.filter((item) => {
               return Object.keys(filter).every((key) => {
                 if (typeof filter[key] === "function") {
                   return filter[key](item[key]);

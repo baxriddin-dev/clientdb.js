@@ -1,3 +1,6 @@
+// Basic functionality testing.
+// To run it, open index.html in a browser
+
 import { ClientDB } from "../src/index.js";
 
 function assert(condition, message) {
