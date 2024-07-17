@@ -58,7 +58,7 @@ export declare class ClientDB {
    * @param databaseName - The name of the database.
    */
   constructor(databaseName: string);
-  
+
   /**
    * Creates a new collection in the database.
    * @param collectionName - The name of the collection to create.
@@ -75,6 +75,12 @@ export declare class ClientDB {
    * Drops the entire database.
    */
   dropDatabase(): void;
+
+  /**
+   * Imports existing data into the database.
+   * @param data - The data to import.
+   */
+  importData(data: Record<string, Record<string, any>[]>): void;
 
   /**
    * Checks if a database exists.

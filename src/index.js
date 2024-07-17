@@ -207,6 +207,34 @@ export class ClientDB {
     Storage.remove(this.database);
   }
 
+  importData(data) {
+    if (!isObject(data)) {
+      throw new ClientDBError("The data must be of type object");
+    }
+
+    Object.keys(data).forEach((collectionName) => {
+      const trimmedName = this._validateName(collectionName, "collection");
+      if (!this.collections[trimmedName]) {
+        this.collections[trimmedName] = [];
+      }
+
+      data[trimmedName].forEach((item) => {
+        if (isObject(item) && !isEmptyObject(item)) {
+          const newData = {
+            ...item,
+            $id: item.$id || ID.unique(),
+            $createdAt: item.$createdAt || Date.now(),
+            $updatedAt: item.$updatedAt || Date.now(),
+          };
+          this.collections[trimmedName].push(newData);
+        }
+      });
+    });
+
+    this._save();
+    this._listCollectionMethods();
+  }
+
   static databaseExists(databaseName) {
     const trimmedName = databaseName?.toString().trim();
     return !!ClientDB.createdDatabases[trimmedName];
