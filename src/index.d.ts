@@ -44,10 +44,21 @@ interface CollectionMethods {
  */
 export declare class ClientDB {
   /**
+   * The name of the database.
+   */
+  database: string;
+
+  /**
+   * The collections in the database.
+   */
+  collections: Record<string, any>;
+
+  /**
    * Constructs a new ClientDB instance.
    * @param databaseName - The name of the database.
    */
   constructor(databaseName: string);
+  
   /**
    * Creates a new collection in the database.
    * @param collectionName - The name of the collection to create.
