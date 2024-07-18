@@ -11,11 +11,11 @@
 </p>
 
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 5px">
-  <a class="text-decoration: none;" href="https://github.com/baxriddin-dev/clientdb.js/blob/master/LICENSE">
+  <a style="text-decoration: none;" href="https://github.com/baxriddin-dev/clientdb.js/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"/>
   </a>
 
-  <a class="text-decoration: none;" href="https://www.npmjs.com/package/@baxriddin-dev/clientdb">
+  <a style="text-decoration: none;" href="https://www.npmjs.com/package/@baxriddin-dev/clientdb">
     <img src="https://img.shields.io/npm/v/%40baxriddin-dev%2Fclientdb?logoColor=orange&color=green" alt="npm"/>
 </a>
 </div>
