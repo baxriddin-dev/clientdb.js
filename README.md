@@ -1,16 +1,3 @@
-<style>
-  .no-decoration {
-    text-decoration: none;
-  }
-
-  .links {
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 5px 
-  }
-</style>
-
 <p align="center">
   <img src="./preview.png" alt="WatermelonDB" width="539" />
 </p>
@@ -32,3 +19,16 @@
     <img src="https://img.shields.io/npm/v/%40baxriddin-dev%2Fclientdb?logoColor=orange&color=green" alt="npm"/>
   </a>
 </div>
+
+<style>
+  .no-decoration {
+    text-decoration: none;
+  }
+
+  .links {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 5px 
+  }
+</style>
