@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets//preview.png" alt="WatermelonDB" width="539" />
+  <img src="./assets/preview.png" alt="WatermelonDB" width="539" />
 </p>
 
 <h4 align="center">
@@ -10,7 +10,7 @@
   Test frontend applications easily and quickly with our simple and fast database working with localStorage. Perfect for developers who need to create a portfolio or test ideas without requiring knowledge of databases or backend.⚡️
 </p>
 
-<div style="display: flex; align-items: center; justify-content: center; gap: 5px">
+<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 5px">
   <a href="https://github.com/baxriddin-dev/clientdb.js/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"/>
   </a>
