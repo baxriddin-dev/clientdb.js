@@ -16,7 +16,6 @@
   </a>
 
   <a href="https://www.npmjs.com/package/@baxriddin-dev/clientdb">
-    <img src="https://img.shields.io/npm/v/%40baxriddin-dev%2Fclientdb?logoColor=orange&color=green
-    " alt="npm"/>
-  </a>
+    <img src="https://img.shields.io/npm/v/%40baxriddin-dev%2Fclientdb?logoColor=orange&color=green" alt="npm"/>
+</a>
 </div>
