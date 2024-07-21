@@ -47,7 +47,7 @@
   - [Static Methods](#static-methods)
     - [`ClientDB.databaseExists(databaseName)`](#clientdbdatabaseexistsdatabasename)
     - [`ClientDB.collectionExists(databaseName, collectionName)`](#clientdbcollectionexistsdatabasename-collectionname)
-- [Example: Advanced TODO App](#example-advanced-todo-app)
+- [Example: TODO App](#example-todo-app)
   - [Steps to Set Up a Project with Vite](#steps-to-set-up-a-project-with-vite)
     - [Setting up `index.html`](#setting-up-indexhtml)
     - [Setting up `main.js`](#setting-up-mainjs)
@@ -123,7 +123,7 @@ db.products.delete(productID);
 ## Listing Data in a Collection
 
 ```js
-const allProducts = db.productID.list();
+const allProducts = db.products.list();
 ```
 
 # Methods
@@ -195,7 +195,7 @@ Checks if a collection exists in a database.
 - `databaseName` (string): The name of the database.
 - `collectionName` (string): The name of the collection.
 
-# Example: Advanced TODO App
+# Example: TODO App
 
 Let's build a more comprehensive TODO application to showcase the full capabilities of the ClientDB library, including creating collections, adding, updating, deleting items, and utilizing filtering, sorting, and pagination features.
 
@@ -218,8 +218,6 @@ Install @baxriddin-dev/clientdb:
 npm install @baxriddin-dev/clientdb
 ```
 
-Set up the project:
-
 Open the project in your text editor and edit the index.html and main.js file.
 
 ## Setting up `index.html`
@@ -227,7 +225,65 @@ Open the project in your text editor and edit the index.html and main.js file.
 Open index.html and add the following basic HTML structure:
 
 ```html
-<!-- code -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced TODO App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        padding: 10px;
+        font-family: 'Times New Roman', Times, sans-serif;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      li {
+        list-style: none;
+        font-size: 20px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      li label {
+        user-select: none;
+        display: flex;
+        gap: 5px;
+      }
+      .todo-head {
+        display: flex;
+      }
+      .checked {
+        text-decoration: line-through;
+      }
+      #todo-list {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>TODO Application</h1>
+    <div class="todo-head">
+      <div>
+        <input type="text" id="todo-title" placeholder="Title" />
+        <button id="add-todo">Add TODO</button>
+        <button id="import-data">Import Data</button>
+        <button id="export-data">Export Data</button>
+      </div>
+    </div>
+
+    <!-- todo lists -->
+    <ul id="todo-list"></ul>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
+
 ```
 
 ## Setting up `main.js`
@@ -235,7 +291,130 @@ Open index.html and add the following basic HTML structure:
 Open main.js and add the following code:
 
 ```js
-// code
+import { ClientDB } from "@baxriddin-dev/clientdb";
+
+// Initialize the database
+const db = new ClientDB("Todo");
+
+// Create the 'todos' collection
+db.createCollection("todos");
+
+// Get DOM elements
+const titleInput = document.getElementById("todo-title");
+const addButton = document.getElementById("add-todo");
+const importButton = document.getElementById("import-data");
+const exportButton = document.getElementById("export-data");
+
+// Function to render the TODO list
+const renderTodos = async () => {
+  const todoList = document.getElementById("todo-list");
+  
+  // Clear the current list
+  todoList.innerHTML = "";
+
+  // Fetch the todos from the database
+  const todos = await db.todos.list();
+
+  // Create list items for each todo
+  todos.forEach(todo => {
+    const listItem = document.createElement("li");
+
+    // Create label to contain checkbox and text
+    const label = document.createElement("label");
+
+    // Create checkbox
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = todo.completed;
+
+    checkbox.addEventListener("change", () => {
+      if (!todo.completed) {
+        label.classList.add('checked')
+      } else {
+        label.classList.remove('checked')
+      }
+
+      // Update the todo's completion status
+      todo.completed = checkbox.checked;
+      db.todos.update(todo.$id, { completed: todo.completed });
+    });
+
+    // Create text node
+    const text = document.createTextNode(todo.title);
+
+    // Append checkbox and text to label
+    label.appendChild(checkbox);
+    label.appendChild(text);
+
+    // Create edit button
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+
+    editButton.addEventListener("click", () => {
+      const newTitle = prompt("Edit TODO title:", todo.title);
+
+      if (newTitle !== null && newTitle.trim() !== "") {
+        todo.title = newTitle.trim();
+        db.todos.update(todo.$id, { title: todo.title });
+        renderTodos();
+      }
+    });
+
+    // Create delete button
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+
+    deleteButton.addEventListener("click", () => {
+      db.todos.delete(todo.$id);
+      renderTodos();
+    });
+
+    // Append label, edit and delete buttons to list item
+    listItem.appendChild(label);
+    listItem.appendChild(editButton);
+    listItem.appendChild(deleteButton);
+
+    todoList.appendChild(listItem);
+  });
+};
+
+
+
+// Add TODO item
+addButton.addEventListener("click", () => {
+  const title = titleInput.value.trim();
+
+  if (title) {
+    db.todos.add({ title, completed: false });
+    titleInput.value = "";
+    renderTodos();
+  } else {
+    alert("Please provide a title");
+  }
+});
+
+// Import data
+importButton.addEventListener("click", () => {
+  const sampleData = {
+    todos: [
+      { title: "Sample Task 1", completed: false },
+      { title: "Sample Task 2", completed: false },
+    ],
+  };
+  db.importData(sampleData);
+  renderTodos();
+});
+
+// Export data
+exportButton.addEventListener("click", () => {
+  const exportedData = db.collections;
+  console.log("Exported Data:", exportedData);
+  alert("Check the console for exported data.");
+});
+
+// Initial render
+renderTodos();
+
 ```
 
 ## Launch of the project
