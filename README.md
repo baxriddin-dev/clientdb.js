@@ -158,9 +158,23 @@ Checks if a collection exists in a database.
 - `databaseName` (string): The name of the database.
 - `collectionName` (string): The name of the collection.
 
+# Example: Advanced TODO App
+
+Let's build a more comprehensive TODO application to showcase the full capabilities of the ClientDB library, including creating collections, adding, updating, deleting items, and utilizing filtering, sorting, and pagination features.
+
+# Steps to Set Up a Project with Vite
+1. Create a new project with Vite:
+
+Open a terminal and run the following commands:
+
+```bash
+npm create vite@latest my-todo-app --template vanilla
+cd my-todo-app
+```
+
 # Author and License
 ## Author
-This library was created and is maintained by Baxriddin Chorshanbiyev.
+This library was created and is maintained by <a href="https://github.com/baxriddin-dev">Baxriddin Chorshanbiyev.</a>
 
 ## License
 This project is licensed under the MIT License. See the <a href="./LICENSE">LICENSE</a> file for more details.
