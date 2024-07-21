@@ -47,7 +47,7 @@
   - [Static Methods](#static-methods)
     - [`ClientDB.databaseExists(databaseName)`](#clientdbdatabaseexistsdatabasename)
     - [`ClientDB.collectionExists(databaseName, collectionName)`](#clientdbcollectionexistsdatabasename-collectionname)
-- [Example: TODO App](#example-todo-app)
+- [Example: Advanced TODO App](#example-advanced-todo-app)
   - [Steps to Set Up a Project with Vite](#steps-to-set-up-a-project-with-vite)
     - [Setting up `index.html`](#setting-up-indexhtml)
     - [Setting up `main.js`](#setting-up-mainjs)
@@ -195,7 +195,7 @@ Checks if a collection exists in a database.
 - `databaseName` (string): The name of the database.
 - `collectionName` (string): The name of the collection.
 
-# Example: TODO App
+# Example: Advanced TODO App
 
 Let's build a more comprehensive TODO application to showcase the full capabilities of the ClientDB library, including creating collections, adding, updating, deleting items, and utilizing filtering, sorting, and pagination features.
 
@@ -238,7 +238,7 @@ Open index.html and add the following basic HTML structure:
       }
       body {
         padding: 10px;
-        font-family: 'Times New Roman', Times, sans-serif;
+        font-family: "Times New Roman", Times, sans-serif;
       }
       h1 {
         margin-bottom: 20px;
@@ -257,6 +257,7 @@ Open index.html and add the following basic HTML structure:
       }
       .todo-head {
         display: flex;
+        gap: 20px;
       }
       .checked {
         text-decoration: line-through;
@@ -275,6 +276,19 @@ Open index.html and add the following basic HTML structure:
         <button id="import-data">Import Data</button>
         <button id="export-data">Export Data</button>
       </div>
+
+      <div>
+        <input type="text" id="search-input" placeholder="search" />
+        <button id="search-btn">Search</button>
+        <select id="filter">
+          <option selected disabled>Filter</option>
+          <option value="all">All Tasks</option>
+          <option value="completed">Completed Tasks</option>
+          <option value="not-completed">Not Completed Tasks</option>
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
     </div>
 
     <!-- todo lists -->
@@ -283,7 +297,6 @@ Open index.html and add the following basic HTML structure:
     <script type="module" src="/main.js"></script>
   </body>
 </html>
-
 ```
 
 ## Setting up `main.js`
@@ -304,19 +317,26 @@ const titleInput = document.getElementById("todo-title");
 const addButton = document.getElementById("add-todo");
 const importButton = document.getElementById("import-data");
 const exportButton = document.getElementById("export-data");
+const searchButton = document.getElementById("search-btn");
+const searchInput = document.getElementById("search-input");
+const filterSelect = document.getElementById("filter");
 
 // Function to render the TODO list
-const renderTodos = async () => {
+const renderTodos = async (data) => {
   const todoList = document.getElementById("todo-list");
-  
+
   // Clear the current list
   todoList.innerHTML = "";
 
   // Fetch the todos from the database
-  const todos = await db.todos.list();
+  let todos = await db.todos.list();
+
+  if (data) {
+    todos = data;
+  }
 
   // Create list items for each todo
-  todos.forEach(todo => {
+  todos.forEach((todo) => {
     const listItem = document.createElement("li");
 
     // Create label to contain checkbox and text
@@ -327,11 +347,13 @@ const renderTodos = async () => {
     checkbox.type = "checkbox";
     checkbox.checked = todo.completed;
 
+    todo.completed ? label.classList.add("checked") : label.classList.remove("checked");
+
     checkbox.addEventListener("change", () => {
       if (!todo.completed) {
-        label.classList.add('checked')
+        label.classList.add("checked");
       } else {
-        label.classList.remove('checked')
+        label.classList.remove("checked");
       }
 
       // Update the todo's completion status
@@ -378,8 +400,6 @@ const renderTodos = async () => {
   });
 };
 
-
-
 // Add TODO item
 addButton.addEventListener("click", () => {
   const title = titleInput.value.trim();
@@ -412,9 +432,53 @@ exportButton.addEventListener("click", () => {
   alert("Check the console for exported data.");
 });
 
+// Search item
+searchButton.addEventListener("click", () => {
+  renderTodos(
+    db.todos.list({
+      search: {
+        title: searchInput.value.trim(),
+      },
+    })
+  );
+});
+
+// Filter todos
+filterSelect.addEventListener("change", () => {
+  const filterValue = filterSelect.value;
+
+  let filter = {};
+  let sort = {};
+
+  switch (filterValue) {
+    case "completed":
+      filter = { completed: true }; // Assuming there's a 'completed' field
+      break;
+    case "not-completed":
+      filter = { completed: false }; // Assuming there's a 'completed' field
+      break;
+    case "asc":
+      sort = { $createdAt: "asc" }; // Sort by creation date ascending
+      break;
+    case "desc":
+      sort = { $createdAt: "desc" }; // Sort by creation date descending
+      break;
+    default:
+      filter = {}; // No filter applied
+      sort = {}; // No sorting applied
+  }
+
+  const options = {
+    filter: filter,
+    sort: sort,
+  };
+
+  const todos = db.todos.list(options);
+  renderTodos(todos);
+});
+
 // Initial render
 renderTodos();
-
 ```
 
 ## Launch of the project
