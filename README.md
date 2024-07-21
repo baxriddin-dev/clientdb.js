@@ -43,9 +43,13 @@ Below is a detailed explanation of the ClientDB class and its methods.
 ```js
 import { ClientDB } from "@baxriddin-dev/clientdb";
 
-// If you use cdn, you don't need to import the class, just place the cdn link at the top of all your js files
+// If you use cdn, you don't need to import the class, 
+// just place the cdn link at the top of all your js files
 
-// Note: As the name suggests, ClientDB can only work on the client side, if you want to use import, export syntax, you should use bundler like Vite or Webpack. In other cases you can use cdn.
+// Note: As the name suggests, ClientDB can only work on 
+// the client side, if you want to use import, export syntax,
+// you should use bundler like Vite or Webpack. 
+// In other cases you can use cdn.
 ```
 
 ## Creating a Database
@@ -153,3 +157,12 @@ Checks if a collection exists in a database.
 
 - `databaseName` (string): The name of the database.
 - `collectionName` (string): The name of the collection.
+
+# Author and License
+## Author
+This library was created and is maintained by Baxriddin Chorshanbiyev.
+
+## License
+This project is licensed under the MIT License. See the <a href="./LICENSE">LICENSE</a> file for more details.
+
+Feel free to contact the author for any questions or contributions.
