@@ -49,8 +49,8 @@
     - [`ClientDB.collectionExists(databaseName, collectionName)`](#clientdbcollectionexistsdatabasename-collectionname)
 - [Example: Advanced TODO App](#example-advanced-todo-app)
   - [Steps to Set Up a Project with Vite](#steps-to-set-up-a-project-with-vite)
-    - [Setting up `index.html`](#setting-up-indexhtml)
-    - [Setting up `main.js`](#setting-up-mainjs)
+    - [Configuring `index.html`](#configuring-indexhtml)
+    - [Configuring `main.js`](#configuring-mainjs)
     - [Launch of the project](#launch-of-the-project)
 - [Author and License](#author-and-license)
   - [Author](#author)
@@ -63,7 +63,7 @@ To install the library, use npm:
 ```bash
 npm install @baxriddin-dev/clientdb
 
-# (or with npm:)
+# (or with yarn:)
 yarn add @baxriddin-dev/clientdb
 ```
 
@@ -220,7 +220,7 @@ npm install @baxriddin-dev/clientdb
 
 Open the project in your text editor and edit the index.html and main.js file.
 
-## Setting up `index.html`
+## Configuring `index.html`
 
 Open index.html and add the following basic HTML structure:
 
@@ -299,7 +299,7 @@ Open index.html and add the following basic HTML structure:
 </html>
 ```
 
-## Setting up `main.js`
+## Configuring `main.js`
 
 Open main.js and add the following code:
 
