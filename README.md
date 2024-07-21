@@ -20,6 +20,43 @@
   </a>
 </div>
 
+# Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Importing the Library](#importing-the-library)
+  - [Creating a Database](#creating-a-database)
+  - [Creating a Collection](#creating-a-collection)
+  - [Adding Data to a Collection](#adding-data-to-a-collection)
+  - [Updating Data in a Collection](#updating-data-in-a-collection)
+  - [Deleting Data from a Collection](#deleting-data-from-a-collection)
+  - [Listing Data in a Collection](#listing-data-in-a-collection)
+- [Methods](#methods)
+  - [Constructor](#constructor)
+    - [`new ClientDB(databaseName)`](#new-clientdbdatabasename)
+  - [Instance Methods](#instance-methods)
+    - [`createCollection(collectionName)`](#createcollectioncollectionname)
+    - [`dropCollection(collectionName)`](#dropcollectioncollectionname)
+    - [`dropDatabase()`](#dropdatabase)
+    - [`importData(data)`](#importdatadata)
+  - [Collection Methods](#collection-methods)
+    - [`add(data)`](#adddata)
+    - [`update(id, data)`](#updateid-data)
+    - [`delete(id)`](#deleteid)
+    - [`list(options)`](#listoptions)
+  - [Static Methods](#static-methods)
+    - [`ClientDB.databaseExists(databaseName)`](#clientdbdatabaseexistsdatabasename)
+    - [`ClientDB.collectionExists(databaseName, collectionName)`](#clientdbcollectionexistsdatabasename-collectionname)
+- [Example: Advanced TODO App](#example-advanced-todo-app)
+  - [Steps to Set Up a Project with Vite](#steps-to-set-up-a-project-with-vite)
+    - [Setting up `index.html`](#setting-up-indexhtml)
+    - [Setting up `main.js`](#setting-up-mainjs)
+    - [Launch of the project](#launch-of-the-project)
+- [Author and License](#author-and-license)
+  - [Author](#author)
+  - [License](#license)
+
+
 # Installation
 
 To install the library, use npm:
@@ -61,32 +98,32 @@ const db = new ClientDB("myDatabase");
 ## Creating a Collection
 
 ```js
-db.createCollection("todos");
+db.createCollection("products");
 ```
 
 ## Adding Data to a Collection
 
 ```js
-db.todos.add({ title: "Buy groceries", completed: false });
+db.products.add({ productName: "Apple", price: 18, categories: ['fruits', 'diet'] });
 ```
 
 ## Updating Data in a Collection
 
 ```js
-const todoId = "some-todo-id"; // The ID of the todo item to update
-db.todos.update(todoId, { completed: true });
+const productID = "some-product-id"; // The ID of the todo item to update
+db.products.update(productID, { price: 15 });
 ```
 
 ## Deleting Data from a Collection
 
 ```js
-db.todos.delete(todoId);
+db.products.delete(productID);
 ```
 
 ## Listing Data in a Collection
 
 ```js
-const allTodos = db.todos.list();
+const allProducts = db.productID.list();
 ```
 
 # Methods
@@ -163,25 +200,25 @@ Checks if a collection exists in a database.
 Let's build a more comprehensive TODO application to showcase the full capabilities of the ClientDB library, including creating collections, adding, updating, deleting items, and utilizing filtering, sorting, and pagination features.
 
 ## Steps to Set Up a Project with Vite
-> Create a new project with Vite. Open a terminal and run the following commands:
+Create a new project with Vite. Open a terminal and run the following commands:
 
 ```bash
 npm create vite@latest my-todo-app -- --template vanilla
 cd my-todo-app
 ```
 
-> Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
-> Install @baxriddin-dev/clientdb:
+Install @baxriddin-dev/clientdb:
 
 ```bash
 npm install @baxriddin-dev/clientdb
 ```
 
-> Настройте проект:
+Set up the project:
 
 Open the project in your text editor and edit the index.html and main.js file.
 
@@ -218,4 +255,4 @@ This library was created and is maintained by <a href="https://github.com/baxrid
 ## License
 This project is licensed under the MIT License. See the <a href="./LICENSE">LICENSE</a> file for more details.
 
-Feel free to contact the author for any questions or contributions.
+Feel free to contact the author for any questions or contributions. 🙂
