@@ -162,15 +162,54 @@ Checks if a collection exists in a database.
 
 Let's build a more comprehensive TODO application to showcase the full capabilities of the ClientDB library, including creating collections, adding, updating, deleting items, and utilizing filtering, sorting, and pagination features.
 
-# Steps to Set Up a Project with Vite
-1. Create a new project with Vite:
-
-Open a terminal and run the following commands:
+## Steps to Set Up a Project with Vite
+> Create a new project with Vite. Open a terminal and run the following commands:
 
 ```bash
-npm create vite@latest my-todo-app --template vanilla
+npm create vite@latest my-todo-app -- --template vanilla
 cd my-todo-app
 ```
+
+> Install dependencies:
+
+```bash
+npm install
+```
+> Install @baxriddin-dev/clientdb:
+
+```bash
+npm install @baxriddin-dev/clientdb
+```
+
+> Настройте проект:
+
+Open the project in your text editor and edit the index.html and main.js file.
+
+## Setting up `index.html`
+
+Open index.html and add the following basic HTML structure:
+
+```html
+<!-- code -->
+```
+
+## Setting up `main.js`
+
+Open main.js and add the following code:
+
+```js
+// code
+```
+
+## Launch of the project
+
+After setting up the files, run the project:
+
+```bash
+npm run dev
+```
+
+Open your application in a browser at http://localhost:5173.
 
 # Author and License
 ## Author
